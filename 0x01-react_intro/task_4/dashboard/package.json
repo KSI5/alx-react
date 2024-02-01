@@ -39,10 +39,12 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^3.2.3",
+
+    "gh-pages": "^4.0.0",
     "react-scripts": "^5.0.1"
   },
   "resolutions": {
     "workbox-webpack-plugin": "6.6.1"
+
   }
 }
