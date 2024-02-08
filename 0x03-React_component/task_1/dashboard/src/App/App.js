@@ -1,8 +1,15 @@
-// ... (existing imports)
+// App.js
+
+import React from "react";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
+import Login from "../Login/Login";
+import CourseList from "../CourseList/CourseList";
+import Notifications from "../Notifications/Notifications";
+import "./App.css";
+import PropTypes from "prop-types";
 
 class App extends React.Component {
-  // ... (existing code)
-
   static defaultProps = {
     isLoggedIn: false,
     logOut: () => {},
@@ -33,7 +40,14 @@ class App extends React.Component {
   render() {
     return (
       <React.Fragment>
-        {/* ... (existing JSX structure) */}
+        <div className="App">
+          <div className="heading-section">
+            <Notifications />
+            <Header />
+          </div>
+          {this.props.isLoggedIn ? <CourseList /> : <Login />}
+          <Footer />
+        </div>
       </React.Fragment>
     );
   }
