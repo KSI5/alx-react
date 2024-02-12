@@ -1,26 +1,36 @@
-import React from "react";
-import CourseListRow from "./CourseListRow";
 import { shallow } from "enzyme";
+import React from "react";
+import CourseList from "./CourseList";
 
-describe("Course List Row component test", () => {
-  it("should render without crashing", () => {
-    const wrapper = shallow(<CourseListRow textFirstCell="test" />);
-
-    expect(wrapper.exists()).toBe(true);
+describe("<CourseList />", () => {
+  it("CourseList renders without crashing", () => {
+    const wrapper = shallow(<CourseList />);
+    expect(wrapper.exists());
   });
+  it("Check that it renders the 5 different rows", () => {
+    const wrapper = shallow(<CourseList />);
+    wrapper.update();
+    const item = wrapper.find("CourseListRow");
 
-  it("should render one cell with colspan = 2 when textSecondCell null", () => {
-    const wrapper = shallow(<CourseListRow isHeader={true} textFirstCell="test" textSecondCell={null} />);
+    expect(item).toHaveLength(5);
 
-    expect(wrapper.find("tr").children()).toHaveLength(1);
-    expect(wrapper.find("tr").childAt(0).html()).toEqual('<th colSpan="2">test</th>');
-  });
+    expect(item.at(0).prop("textFirstCell")).toEqual("Available courses");
+    expect(item.at(0).prop("isHeader")).toEqual(true);
 
-  it("should render two cells when textSecondCell not null", () => {
-    const wrapper = shallow(<CourseListRow isHeader={false} textFirstCell="test" textSecondCell="test" />);
+    expect(item.at(1).prop("textFirstCell")).toEqual("Course name");
+    expect(item.at(1).prop("textSecondCell")).toEqual("Credit");
+    expect(item.at(1).prop("isHeader")).toEqual(true);
 
-    expect(wrapper.find("tr").children()).toHaveLength(2);
-    expect(wrapper.find("tr").childAt(0).html()).toEqual("<td>test</td>");
-    expect(wrapper.find("tr").childAt(1).html()).toEqual("<td>test</td>");
+    expect(item.at(2).prop("textFirstCell")).toEqual("ES6");
+    expect(item.at(2).prop("textSecondCell")).toEqual("60");
+    expect(item.at(2).prop("isHeader")).toEqual(false);
+
+    expect(item.at(3).prop("textFirstCell")).toEqual("Webpack");
+    expect(item.at(3).prop("textSecondCell")).toEqual("20");
+    expect(item.at(3).prop("isHeader")).toEqual(false);
+
+    expect(item.at(4).prop("textFirstCell")).toEqual("React");
+    expect(item.at(4).prop("textSecondCell")).toEqual("40");
+    expect(item.at(4).prop("isHeader")).toEqual(false);
   });
 });
