@@ -1,38 +1,48 @@
-import React from 'react';
-import PropType from 'prop-types';
-import CourseShape from './CourseShape';
-import CourseListRow from './CourseListRow';
-import './CourseList.css';
+import React from "react";
+import PropTypes from "prop-types";
 
-function CourseList({ listCourses }) {
-  return (
-    <table id="CourseList" cellPadding="0" cellSpacing="0">
-      <thead>
-        <CourseListRow isHeader={true} textFirstCell='Available courses' />
-        <CourseListRow isHeader={true} textFirstCell='Course name' textSecondCell="Credit" />
-      </thead>
-      <tbody>
-        {
-        listCourses.length == 0 ?
-          <CourseListRow isHeader={false} textFirstCell='No course available yet'/>
-        : null
+function CourseListRow({ isHeader, textFirstCell, textSecondCell }) {
+    let element;
+    const rowStyles = { backgroundColor: "#f5f5f5ab" };
+    const headerRowStyles = { backgroundColor: "#deb5b545" };
+
+    if (isHeader === true) {
+        if (textSecondCell === null) {
+            return <tr><th colSpan="2">{textFirstCell}</th></tr>;
+        } else {
+            return (
+                <tr>
+                    <th>{textFirstCell}</th>
+                    <th>{textSecondCell}</th>
+                </tr>
+            );
         }
-        {
-          listCourses.map((val, idx) => {
-            return <CourseListRow isHeader={false} textFirstCell={val.name} textSecondCell={val.credit} key={val.id}/>
-          })
-        }
-      </tbody>
-    </table>
-  );
+    } else if (isHeader === false) {
+        return (
+            <tr>
+                <td>{textFirstCell}</td>
+                <td>{textSecondCell}</td>
+            </tr>
+        );
+    }
+
+    let isHeaderStyle;
+
+    if (isHeader) isHeaderStyle = headerRowStyles;
+    else isHeaderStyle = rowStyles;
+
+    return <tr style={isHeaderStyle}>{element}</tr>;
 }
 
-CourseList.defaultProps = {
-  listCourses: []
+CourseListRow.defaultProps = {
+    isHeader: false,
+    textSecondCell: null,
 };
 
-CourseList.propType = {
-  listCourses: PropType.arrayOf(CourseShape)
+CourseListRow.propTypes = {
+    isHeader: PropTypes.bool,
+    textFirstCell: PropTypes.string.isRequired,
+    textSecondCell: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
-export default CourseList;
+export default CourseListRow;
