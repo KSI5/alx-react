@@ -1,23 +1,30 @@
-import React from "react";
-import { shallow } from "enzyme";
-import NotificationItem from "./NotificationItem";
-import { StyleSheetTestUtils } from "aphrodite";
+import React from 'react';
+import { expect } from 'chai';
+import { shallow } from 'enzyme';
+import { StyleSheetTestUtils } from 'aphrodite';
 
-describe("Testing <NotificationItem />", () => {
-  let wrapper;
+import NotificationItem from './NotificationItem';
 
+describe('NotificationItem', () => {
   beforeEach(() => {
     StyleSheetTestUtils.suppressStyleInjection();
   });
 
-  it("<NotificationItem /> renders without crashing", () => {
-    wrapper = shallow(<NotificationItem />);
+  afterEach(() => {
+    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
+  });
+  
+  test('renders without crashing', () => {
+    const wrapper = shallow(<NotificationItem />);
     expect(wrapper.exists());
   });
+  test('renders with correct type and value', () => {
+    const wrapper = shallow(<NotificationItem type='default' value='test' />);
+    const li = wrapper.find('li');
 
-  it("<NotificationItem />  renders the correct html by passing dummy type and value props,", () => {
-    wrapper = shallow(<NotificationItem type="default" value="test" />);
-    expect(wrapper.find("li").text()).toBe("test");
-    expect(wrapper.find("li").prop("data-notification-type")).toBe("default");
+    expect(li.props()).to.have.property('data-notification-type', 'default');
+    expect(li.text()).to.equal('test');
   });
+
+
 });
