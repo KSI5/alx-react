@@ -1,55 +1,43 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, css } from "aphrodite";
+import { StyleSheet, css } from 'aphrodite';
 
-
-class NotificationItem extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.selected_style = this.props.type === 'default' ?  itemStyles.default : itemStyles.urgent;
-  }
-
+class NotificationItem extends PureComponent {
   render() {
-    return (
-      this.props.value ? 
-      <li
-      data-notification-type={this.props.type}
-      onClick={() => this.props.markAsRead(this.props.id)}
-      className={css(this.selected_style)}
-      >{this.props.value}</li> 
-      :
-      <li
-      data-notification-type={this.props.type}
-      dangerouslySetInnerHTML={this.props.html}
-      onClick={() => {console.log('empty func');}}
-      className={css(this.selected_style)}
-      ></li>
+    const { id, type, html, value, markAsRead } = this.props;
+
+  return html === undefined? ( 
+      <li data-notification-type={type} onClick={() => markAsRead(id) } className={css(styles[type])}>
+      {value}
+      </li>
+    ) : (
+      <li data-notification-type={type} dangerouslySetInnerHTML={html} className={css(styles[type])}></li>
     );
   }
+}
+
+NotificationItem.propTypes = {
+  id: PropTypes.number.isRequired,
+  type: PropTypes.string,
+  html: PropTypes.shape({ __html: PropTypes.string }),
+  value: PropTypes.string,
+  markAsRead: PropTypes.func
 };
-
-const itemStyles = StyleSheet.create({
-  urgent: {
-		color: 'red'
-	},
-
-	default: {
-		color: 'blue'
-	}
-});
 
 NotificationItem.defaultProps = {
   type: 'default',
-  markAsRead: () => {console.log('empty func');},
-	id: 0
+  value: '',
+  markAsRead: () => {}
 };
 
-NotificationItem.propTypes = {
-  html: PropTypes.shape({__html: PropTypes.string}),
-  type: PropTypes.string.isRequired,
-  value: PropTypes.string,
-  markAsRead: PropTypes.func,
-  id: PropTypes.number
-};
+const styles = StyleSheet.create({
+  default: {
+    color: 'blue'
+  },
+  urgent: {
+    color: 'red'
+  }
+});
+
 
 export default NotificationItem;
