@@ -1,43 +1,48 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { StyleSheet, css } from 'aphrodite';
+import React from "react";
+import PropTypes from "prop-types";
+import { StyleSheet, css } from "aphrodite";
 
-class NotificationItem extends PureComponent {
+class NotificationItem extends React.PureComponent {
   render() {
-    const { id, type, html, value, markAsRead } = this.props;
-
-  return html === undefined? ( 
-      <li data-notification-type={type} onClick={() => markAsRead(id) } className={css(styles[type])}>
-      {value}
-      </li>
-    ) : (
-      <li data-notification-type={type} dangerouslySetInnerHTML={html} className={css(styles[type])}></li>
+    const { type, value, html, markAsRead, id } = this.props;
+    return (
+      <>
+        {type && value ? (
+          <li className={type === "default" ? css(styles.default) : css(styles.urgent)} onClick={() => markAsRead(id)} data-notification-type={type}>
+            {value}
+          </li>
+        ) : null}
+        {html ? <li onClick={() => markAsRead(id)} data-urgent className={css(styles.urgent)} dangerouslySetInnerHTML={{ __html: html }}></li> : null}
+      </>
     );
   }
 }
 
+const styles = StyleSheet.create({
+  default: {
+    color: "blue",
+  },
+  urgent: {
+    color: "red",
+  },
+});
+
 NotificationItem.propTypes = {
-  id: PropTypes.number.isRequired,
-  type: PropTypes.string,
-  html: PropTypes.shape({ __html: PropTypes.string }),
+  type: PropTypes.string.isRequired,
   value: PropTypes.string,
-  markAsRead: PropTypes.func
+  __html: PropTypes.shape({
+    html: PropTypes.string,
+  }),
+  markAsRead: PropTypes.func,
+  id: PropTypes.number,
 };
 
 NotificationItem.defaultProps = {
-  type: 'default',
-  value: '',
-  markAsRead: () => {}
-};
-
-const styles = StyleSheet.create({
-  default: {
-    color: 'blue'
+  type: "default",
+  markAsRead: () => {
+    console.log("empty func");
   },
-  urgent: {
-    color: 'red'
-  }
-});
-
+  id: 0,
+};
 
 export default NotificationItem;
